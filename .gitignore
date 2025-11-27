@@ -1,0 +1,25 @@
+# Maven target directory
+target/
+bin/
+
+# Eclipse
+.classpath
+.project
+.settings/
+
+# Maven Wrapper
+.mvn/
+mvnw
+mvnw.cmd
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IntelliJ (if ever used)
+.idea/
+*.iml
+out/
