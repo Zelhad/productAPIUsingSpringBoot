@@ -3,12 +3,15 @@ package com.productApi.productApi.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -16,7 +19,7 @@ import com.productApi.productApi.entities.Product;
 import com.productApi.productApi.services.ProductService;
 
 @RestController
-//@RequestMapping("/products")
+@RequestMapping("/api/productInventoryManagement/v1/product")
 public class ProductController {
 	/*
 	 * @GetMapping public String getProducts(@RequestParam int page, @RequestParam
@@ -40,37 +43,63 @@ public class ProductController {
 	@Autowired
 	ProductService productService;
 
-	@GetMapping("/products")
+	@GetMapping
 	public List<Product> getAllProducts() {
-		List<Product> allProducts = productService.getAllProducts();
-		return allProducts;
-
+		return productService.getAllProducts();
 	}
 
-	@GetMapping("/products/{id}")
-	public Product getProductById(@PathVariable int id) {
-		return productService.getProductById(id);
+	@GetMapping("/{id}")
+	public ResponseEntity<Product> getProductById(@PathVariable int id) {
+		try {
+			Product product = productService.getProductById(id);
+			return new ResponseEntity<Product>(product, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
 	}
 
-	@GetMapping("/products/productName")
-	public Product getProductByName(@RequestParam String name) {
-		return productService.getProductByName(name);
+	@GetMapping("/search")
+	public ResponseEntity<Product> getProductByName(@RequestParam String name) {
+		try {
+			Product productByName = productService.getProductByName(name);
+			return new ResponseEntity<Product>(productByName, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
 	}
 
-	@PostMapping("/addProduct")
+	@PostMapping
 	public Product addProduct(@RequestBody Product product) {
 		return productService.addProduct(product);
 	}
-	
-	@PutMapping("/updateProduct")
-	public Product updateProduct(@RequestBody Product product) {
-		return productService.updateProduct(product);
+
+	@PutMapping("/{id}")
+	public ResponseEntity<Product> updateProduct(@PathVariable int id, @RequestBody Product product) {
+
+		try {
+			Product foundProduct = productService.getProductById(id);
+			foundProduct.setHref(product.getHref());
+			foundProduct.setDescription(product.getDescription());
+			foundProduct.setIsBundle(product.getIsBundle());
+			foundProduct.setIsCustomerVisible(product.getIsCustomerVisible());
+			foundProduct.setName(product.getName());
+			foundProduct.setOrderDate(product.getOrderDate());
+			foundProduct.setProductSerialNumber(product.getProductSerialNumber());
+			foundProduct.setStartDate(product.getStartDate());
+			foundProduct.setTerminationDate(product.getTerminationDate());
+
+			Product updatedProduct = productService.updateProduct(product);
+
+			return new ResponseEntity<Product>(updatedProduct, HttpStatus.OK);
+
+		} catch (Exception e) {
+			return new ResponseEntity<>(HttpStatus.CONFLICT);
+		}
 	}
-	
-	@DeleteMapping("/deleteProduct/{id}")
-	public AddResponse deleteProduct(@PathVariable int  id) {
+
+	@DeleteMapping("/{id}")
+	public AddResponse deleteProduct(@PathVariable int id) {
 		return productService.deleteProduct(id);
 	}
-	
 
 }
