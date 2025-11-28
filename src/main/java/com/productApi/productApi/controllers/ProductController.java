@@ -69,8 +69,9 @@ public class ProductController {
 	}
 
 	@PostMapping
-	public Product addProduct(@RequestBody Product product) {
-		return productService.addProduct(product);
+	public ResponseEntity<Product> addProduct(@RequestBody Product product) {
+				Product createdProduct = productService.addProduct(product);
+				return  new ResponseEntity<>(createdProduct, HttpStatus.CREATED);
 	}
 
 	@PutMapping("/{id}")
@@ -88,7 +89,7 @@ public class ProductController {
 			foundProduct.setStartDate(product.getStartDate());
 			foundProduct.setTerminationDate(product.getTerminationDate());
 
-			Product updatedProduct = productService.updateProduct(product);
+			Product updatedProduct = productService.updateProduct(foundProduct);
 
 			return new ResponseEntity<Product>(updatedProduct, HttpStatus.OK);
 
@@ -98,8 +99,15 @@ public class ProductController {
 	}
 
 	@DeleteMapping("/{id}")
-	public AddResponse deleteProduct(@PathVariable int id) {
-		return productService.deleteProduct(id);
+	public ResponseEntity<String> deleteProduct(@PathVariable int id) {
+	    try {
+	        productService.deleteProduct(id);
+	        return new ResponseEntity<>("Product deleted successfully", HttpStatus.OK);
+	    } catch (Exception e) {
+	        return new ResponseEntity<>("Product not found", HttpStatus.NOT_FOUND);
+	    }
 	}
 
-}
+	}
+
+
