@@ -8,7 +8,7 @@ public class ProductApiApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(ProductApiApplication.class, args);
-		System.out.println("Finally I meed  you Mister Spring boot");
+		
 	}
 
 }
