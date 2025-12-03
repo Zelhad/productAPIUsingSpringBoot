@@ -44,8 +44,13 @@ public class ProductController {
 	ProductService productService;
 
 	@GetMapping
-	public List<Product> getAllProducts() {
-		return productService.getAllProducts();
+	public ResponseEntity<List<Product>> getAllProducts() {
+		try {
+			List<Product> allProducts = productService.getAllProducts();
+			return new ResponseEntity<List<Product>>(allProducts, HttpStatus.FOUND);
+		} catch (Exception e) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
 	}
 
 	@GetMapping("/{id}")
@@ -70,8 +75,8 @@ public class ProductController {
 
 	@PostMapping
 	public ResponseEntity<Product> addProduct(@RequestBody Product product) {
-				Product createdProduct = productService.addProduct(product);
-				return  new ResponseEntity<>(createdProduct, HttpStatus.CREATED);
+		Product createdProduct = productService.addProduct(product);
+		return new ResponseEntity<>(createdProduct, HttpStatus.CREATED);
 	}
 
 	@PutMapping("/{id}")
@@ -100,14 +105,12 @@ public class ProductController {
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<String> deleteProduct(@PathVariable int id) {
-	    try {
-	        productService.deleteProduct(id);
-	        return new ResponseEntity<>("Product deleted successfully", HttpStatus.OK);
-	    } catch (Exception e) {
-	        return new ResponseEntity<>("Product not found", HttpStatus.NOT_FOUND);
-	    }
+		try {
+			productService.deleteProduct(id);
+			return new ResponseEntity<>("Product deleted successfully", HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>("Product not found", HttpStatus.NOT_FOUND);
+		}
 	}
 
-	}
-
-
+}
