@@ -1,5 +1,22 @@
 package com.productApi.productApi.controllers;
 
+import java.time.OffsetDateTime;
+
+import com.productApi.productApi.entities.Product;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@EqualsAndHashCode
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class AddResponse {
 	private String msg;
 	private int id;
