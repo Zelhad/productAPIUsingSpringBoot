@@ -1,22 +1,45 @@
 # Server Configuration
-server.port=8080
+server:
+  port: 8080
+  compression:
+    enabled: true
+    mime-types:
+     - application/json
+     - application/xml
+     - text/xml
+     - text/css
+     - text/plain
+  http2:
+    enabled: true
+  shutdown: graceful
+management:
+  health:
+    probes:
+      enabled: true
+
+
+
 
 # PostgreSQL Database Configuration
-spring.datasource.url=jdbc:postgresql://localhost:5433/productschema
-spring.datasource.driver-class-name=org.postgresql.Driver
-spring.datasource.username=postgres
-spring.datasource.password=admin
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5433/productschema
+    driver-class-name: org.postgresql.Driver
+    username: postgres
+    password: admin
 
-# JPA Configuration for PostgreSQL
-spring.jpa.database-platform=org.hibernate.dialect.PostgreSQLDialect
-#create table when the application on and delete it   when off 
-#spring.jpa.hibernate.ddl-auto=create-drop
-spring.jpa.hibernate.ddl-auto=update
-spring.jpa.show-sql=true
-spring.jpa.properties.hibernate.format_sql=true
+  # JPA Configuration for PostgreSQL
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
 
-# Disable H2 console since we're using PostgreSQL
-# spring.h2.console.enabled=false
+    # create table when the application starts and delete it when it stops
+    # hibernate.ddl-auto: create-drop
 
-# Logging
-#logging.level.com.productApi.productApi=DEBUG
+    hibernate:
+      ddl-auto: update
+
+    show-sql: true
+
+    properties:
+      hibernate:
+        format_sql: true
