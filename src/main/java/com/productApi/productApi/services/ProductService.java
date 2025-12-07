@@ -35,7 +35,6 @@ public class ProductService {
 				return product; // Found → return it
 			}
 		}
-
 		// Not found → return a built Product object
 		return Product.builder().name(name).description("No description available").isBundle(false)
 				.isCustomerVisible(true).build();
